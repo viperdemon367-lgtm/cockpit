@@ -1,6 +1,23 @@
+# Construit Cockpit.exe sous Windows et publie une Release GitHub téléchargeable.
+#
+# Automatique : se déclenche tout seul à chaque modification de app/, static/, tests/, run.py ou
+# requirements.txt sur la branche main (donc à chaque modification faite directement sur GitHub).
+# Peut aussi être lancé à la main : onglet Actions -> Publier une version (exe) -> Run workflow.
+#
+# Le lien de téléchargement ne change jamais, même d'une version à l'autre :
+#   https://github.com/<COMPTE>/<DEPOT>/releases/latest/download/Cockpit.exe
 name: Publier une version (exe)
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "static/**"
+      - "tests/**"
+      - "run.py"
+      - "requirements.txt"
+      - ".github/workflows/release.yml"
 jobs:
   release:
     runs-on: windows-latest
