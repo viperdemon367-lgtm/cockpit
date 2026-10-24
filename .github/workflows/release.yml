@@ -1,0 +1,30 @@
+name: Publier une version (exe)
+on:
+  workflow_dispatch:
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Dependances
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+      - name: Tests du moteur
+        run: python -m pytest -q
+      - name: Construction de Cockpit.exe
+        run: pyinstaller --noconfirm --onefile --name Cockpit --add-data "static;static" run.py
+      - name: Publier la Release GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/Cockpit.exe
+            distribution.example.json
+          fail_on_unmatched_files: false
+          generate_release_notes: true
+          tag_name: v${{ github.run_number }}
