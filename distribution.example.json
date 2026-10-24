@@ -1,0 +1,9 @@
+{
+  "corp_name": "Section XIII",
+  "esi_client_id": "COLLE_ICI_LE_CLIENT_ID_DE_TON_APPLICATION_EVE",
+  "price_market": "jita",
+  "lang": "fr",
+  "doctrines_url": "https://raw.githubusercontent.com/TON-COMPTE/TON-DEPOT/main/doctrines.json",
+  "update_manifest_url": "https://raw.githubusercontent.com/TON-COMPTE/TON-DEPOT/main/version.json",
+  "structures": []
+}

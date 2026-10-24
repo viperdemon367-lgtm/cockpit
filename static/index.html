@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cockpit — copilote EVE Online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<aside class="nav">
+  <div class="brand"><span class="logo-mark"></span>Cockpit<small id="corp-name"></small></div>
+  <nav>
+    <div class="nav-sec">Prise en main</div>
+    <a href="#guide" data-view="guide">Comment ça marche</a>
+    <a href="#demarrage" data-view="demarrage" id="nav-setup">Démarrage</a>
+    <a href="#patch" data-view="patch">Notes de patch <span class="badge" id="patch-badge" hidden>nouveau</span></a>
+    <a href="#soutenir" data-view="soutenir" class="nav-heart">Soutenir Cockpit ♥</a>
+    <div class="nav-sec">PvP</div>
+    <a href="#doctrines" data-view="doctrines">Doctrines & fits</a>
+    <a href="#carte" data-view="carte">Carte de la galaxie</a>
+    <a href="#dscan" data-view="dscan">Analyse D-scan</a>
+    <a href="#alarme" data-view="alarme">Alarme local & intel <span class="badge" id="alarm-badge" hidden>ON</span></a>
+    <div class="nav-sec">Industrie</div>
+    <a href="#production" data-view="production">Production</a>
+    <a href="#invention" data-view="invention">Invention</a>
+    <a href="#opportunites" data-view="opportunites">Opportunités</a>
+    <a href="#arbitrage" data-view="arbitrage">Arbitrage hubs</a>
+    <a href="#pi" data-view="pi">Planétaire (PI)</a>
+    <a href="#jobs" data-view="jobs">Mes jobs en cours</a>
+    <div class="nav-sec">Compte</div>
+    <a href="#personnages" data-view="personnages">Personnages & stock</a>
+    <a href="#structures" data-view="structures">Structures</a>
+    <a href="#reglages" data-view="reglages">Réglages</a>
+    <a href="#aide" data-view="aide">Aide & lexique</a>
+    <div class="nav-sec">Bêta</div>
+    <a href="#intel" data-view="intel">Intel pilotes <span class="badge beta">BÊTA</span></a>
+  </nav>
+  <div class="lang-switch" id="lang-switch"></div>
+  <div class="status" id="status">Chargement…</div>
+</aside>
+
+<main>
+  <div id="banner"></div>
+  <!-- COMMENT CA MARCHE -->
+  <section id="v-guide" class="view" hidden><div id="g-out"></div></section>
+
+  <!-- NOTES DE PATCH -->
+  <section id="v-patch" class="view" hidden>
+    <header class="vhead"><h1>Notes de patch</h1><p>Ce qui change à chaque version de l'outil, de la plus récente à la plus ancienne.</p></header>
+    <div id="n-out"></div>
+  </section>
+
+  <!-- DOCTRINES -->
+  <section id="v-doctrines" class="view" hidden>
+    <header class="vhead"><h1>Doctrines & fits</h1>
+      <p>Les fits de la corpo, rangés par doctrine : prix, compétences manquantes de chacun de tes personnages, envoi en jeu, commande de flotte.</p></header>
+    <div class="toolbar">
+      <button class="primary" id="d-new">Nouvelle doctrine</button>
+      <button id="d-import">Importer des fits (fichier)</button>
+      <button id="d-export">Exporter mes doctrines</button>
+      <button id="d-corp" hidden>Actualiser les doctrines corpo</button>
+      <span class="muted" id="d-info"></span>
+    </div>
+    <details class="howto" id="d-howto">
+      <summary>Comment importer les fits de la corpo ?</summary>
+      <div class="howto-body">
+        <p>EVE ne donne pas les fits de corporation aux outils tiers : il faut les <b>exporter en fichier depuis le jeu</b>, puis les importer ici. Une fois suffit ; refais-le quand la corpo change ses fits (les doublons sont ignorés).</p>
+        <ol>
+          <li><b>En jeu</b>, ouvre la fenêtre <b>Fitting</b> (Alt+F), puis la liste des fits enregistrés (gestion des fits) et l'onglet <b>Corporation</b>.</li>
+          <li>Sélectionne les fits à récupérer (<b>Ctrl+clic</b> ou <b>Maj+clic</b> pour plusieurs).</li>
+          <li>Utilise l'<b>export vers un fichier</b>. Le jeu crée un fichier <b>.xml</b>, en général dans <code>Documents\EVE\fittings</code>.<br>
+            <span class="muted">Pas d'export depuis l'onglet Corporation sur ton client ? Clic droit sur les fits corpo → les copier dans tes fits personnels, puis exporte depuis l'onglet Personnel.</span></li>
+          <li><b>Ici</b>, clique <b>« Importer des fits (fichier) »</b> ou <b>glisse le fichier .xml</b> n'importe où sur cette page.</li>
+          <li>Choisis le rangement : <b>une doctrine par préfixe</b> si les fits s'appellent « [Vexor] DPS », « [Vexor] Logi »… ; sinon <b>tout dans une nouvelle doctrine</b>.</li>
+          <li>Vérifie l'<b>aperçu</b> (rôles, lignes non reconnues, doublons) puis clique <b>Importer</b>.</li>
+        </ol>
+        <p><b>Autres sources acceptées :</b> un fit copié en jeu (« Copier dans le presse-papiers », format EFT), plusieurs fits collés à la suite, un fichier exporté de Pyfa, ou le fichier de doctrines exporté par un autre membre.</p>
+        <p><b>Pour toute la corpo :</b> une fois les doctrines propres, « Exporter mes doctrines » donne un fichier à partager. Publié sur GitHub (adresse dans distribution.json), il arrive automatiquement chez tous les membres, qui envoient ensuite les fits dans leur jeu avec « Envoyer tous les fits en jeu ».</p>
+      </div>
+    </details>
+    <div id="d-importpanel"></div>
+    <div class="doc-layout"><div id="d-list"></div><div id="d-main"></div></div>
+  </section>
+
+  <!-- INTEL -->
+  <section id="v-intel" class="view" hidden>
+    <header class="vhead"><h1>Intel pilotes <span class="badge beta big">BÊTA</span></h1>
+      <p>Colle les noms du local (ou d'un canal, d'un killmail…) : regroupement par alliance et corpo, dangerosité et habitudes de chaque pilote d'après zKillboard.</p></header>
+    <div class="beta-box" id="in-locked">
+      <div class="beta-tag">BÊTA</div>
+      <h2>Fonction en test — pas encore à utiliser</h2>
+      <p>L'intel pilotes (stats zKillboard, niveau de menace, standings) est encore en cours de validation : les chiffres n'ont pas été vérifiés en conditions réelles. <b>Ne t'en sers pas pour prendre une décision en fleet.</b></p>
+      <button id="in-unlock">Je veux tester quand même</button>
+    </div>
+    <div id="in-tools" hidden>
+    <div class="warnbox"><b>BÊTA</b> — résultats non garantis. Signale ce qui te paraît faux.</div>
+    <div class="toolbar">
+      <div class="field grow"><label>Noms (un par ligne). En jeu : sélectionne les pilotes dans la liste du local, Ctrl+C, puis colle ici.</label>
+        <textarea id="in-text" rows="6" placeholder="Pilote 1&#10;Pilote 2&#10;Nom d'une corpo ou d'une alliance"></textarea></div>
+      <div class="field"><label>Stats zKillboard pour les</label><select id="in-limit"><option value="30">30 premiers</option><option value="60" selected>60 premiers</option><option value="120">120 premiers (lent)</option></select></div>
+      <button class="primary" id="in-run">Analyser</button>
+    </div>
+    <div id="in-out"></div>
+    </div>
+  </section>
+
+  <!-- CARTE -->
+  <section id="v-carte" class="view" hidden>
+    <header class="vhead"><h1>Carte de la galaxie</h1>
+      <p>Tape où tu veux aller : l'outil part de la position de ton personnage et trace le chemin (portes, ponts de l'alliance, Thera). Clique sur un système pour ses infos et ses liens Dotlan.</p></header>
+    <div class="toolbar route-bar">
+      <div class="field"><label>Départ</label><select id="m-from-sel"></select></div>
+      <div class="field" id="m-from-wrap" hidden><label>Système de départ</label><div class="ac"><input id="m-from" autocomplete="off" placeholder="ex. Jita"><div class="ac-list" id="m-from-list"></div></div></div>
+      <div class="field grow"><label>Où veux-tu aller ?</label><div class="ac"><input id="m-to" autocomplete="off" placeholder="Nom d'un système : Jita, 1DQ1-A…"><div class="ac-list" id="m-to-list"></div></div></div>
+      <div class="field"><label>Chemin</label><div class="seg" id="m-mode-seg">
+        <button data-mode="shortest" class="on">Le plus court</button><button data-mode="secure">Le plus sûr</button><button data-mode="insecure">Sans high-sec</button></div></div>
+      <button class="primary" id="m-route">Tracer</button>
+      <input type="hidden" id="m-mode" value="shortest">
+      <details class="opts"><summary>Options</summary><div class="opts-body">
+        <label class="check"><input type="checkbox" id="m-use-jb" checked> Prendre les ponts de l'alliance</label>
+        <label class="check"><input type="checkbox" id="m-use-wh"> Passer par Thera / Turnur</label>
+        <div class="field"><label>Systèmes à éviter</label><input id="m-avoid" placeholder="ex. Uedama, Niarja"></div>
+      </div></details>
+    </div>
+    <div class="map-layout">
+      <div>
+        <div class="map-bar">
+          <div class="ac" style="width:220px"><input id="m-search" placeholder="Trouver un système…" autocomplete="off"><div class="ac-list" id="m-search-list"></div></div>
+          <select id="m-layer" title="Couleur des systèmes">
+            <option value="sec">Couleurs : sécurité</option><option value="kills">Couleurs : kills (1 h)</option>
+            <option value="pods">Couleurs : capsules (1 h)</option><option value="jumps">Couleurs : trafic (1 h)</option>
+            <option value="npc">Couleurs : ratting (1 h)</option><option value="sov">Couleurs : souveraineté (alliances)</option></select>
+          <select id="m-region"><option value="">Toutes les régions</option></select>
+          <button class="small" id="m-me" title="Recentrer sur mon personnage">📍 Moi</button>
+          <button class="small" id="m-refresh" title="Recharger kills, positions, Thera">↻</button>
+          <details class="opts"><summary>Affichage</summary><div class="opts-body">
+            <label class="check"><input type="checkbox" id="m-jb" checked> Ponts de saut</label>
+            <label class="check"><input type="checkbox" id="m-wh" checked> Thera / Turnur</label>
+            <label class="check"><input type="checkbox" id="m-chars" checked> Mes persos</label></div></details>
+        </div>
+        <div class="map-wrap" id="m-wrap"><canvas id="m-canvas"></canvas><div id="m-tip" class="map-tip" hidden></div>
+          <div class="map-legend" id="m-legend"></div>
+          <div class="map-zoom"><button id="m-zin" title="Zoomer">+</button><button id="m-zout" title="Dézoomer">−</button><button id="m-fit" title="Toute la galaxie">⤢</button></div>
+          <div class="map-help">Molette : zoom · Glisser : déplacer · Clic : infos du système</div></div>
+      </div>
+      <div id="m-side">
+        <div id="m-sys"><div class="card"><div class="body muted">Clique sur un système de la carte.</div></div></div>
+        <div id="m-route-out"></div>
+        <div id="m-hot"></div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:18px">
+      <div class="card"><h2>Ponts de saut de l'alliance</h2><div class="body">
+        <p style="margin-top:0">Les ponts ne sont pas publics. L'outil peut les lire avec ton personnage s'il a accès aux ponts de l'alliance.</p>
+        <div class="actions"><button class="primary" id="m-jbimport">Importer depuis mes personnages</button><span class="muted" id="m-jbinfo"></span></div>
+        <details style="margin-top:10px"><summary class="muted" style="cursor:pointer">Ou coller la liste à la main / voir la liste</summary>
+          <textarea id="m-jbtext" rows="6" style="margin-top:8px" placeholder="1DQ1-A » T5ZI-S&#10;PR-8CA <-> 5ZXX-K"></textarea>
+          <div class="actions"><button id="m-jbsave">Enregistrer la liste</button></div></details>
+        <div class="wrow" style="margin-top:12px"><div class="field"><label>Mon système de base</label><div class="ac"><input id="m-home" placeholder="ex. 1DQ1-A" autocomplete="off"><div class="ac-list" id="m-home-list"></div></div></div><button id="m-homesave">Enregistrer</button></div>
+      </div></div>
+      <div class="card"><h2>Connexions Thera & Turnur <span class="muted" style="font-size:13px">EVE-Scout</span></h2><div class="body" id="m-thera"><p class="muted">Chargement…</p></div></div>
+    </div>
+  </section>
+
+  <!-- SOUTENIR -->
+  <section id="v-soutenir" class="view" hidden><div id="don-out"></div></section>
+
+  <!-- PLANETAIRE -->
+  <section id="v-pi" class="view" hidden>
+    <header class="vhead"><h1>Planétaire (PI)</h1>
+      <p>Toutes les planètes et ressources autour de toi, ce que tu peux produire de P1 à P4 avec ce qu'il y a dans ton rayon, et les meilleurs systèmes pour chaque produit.</p></header>
+    <div class="toolbar">
+      <div class="field"><label>Autour de</label><select id="pi-from"></select></div>
+      <div class="field" id="pi-other-wrap" hidden><label>Système</label><div class="ac"><input id="pi-sys" autocomplete="off" placeholder="ex. 1DQ1-A"><div class="ac-list" id="pi-sys-list"></div></div></div>
+      <div class="field"><label>Rayon</label><select id="pi-jumps">
+        <option value="0">Ce système seulement</option><option value="1">1 saut</option><option value="2">2 sauts</option>
+        <option value="3" selected>3 sauts</option><option value="5">5 sauts</option><option value="8">8 sauts</option><option value="10">10 sauts</option></select></div>
+      <button class="primary" id="pi-run">Analyser</button>
+    </div>
+    <div id="pi-out"><div class="empty">Choisis un centre et un rayon, puis « Analyser ».</div></div>
+  </section>
+
+  <!-- ALARME -->
+  <section id="v-alarme" class="view" hidden>
+    <header class="vhead"><h1>Alarme local & intel</h1>
+      <p>Un bip quand un neutre, un orange ou un rouge arrive dans ton local, ou quand un canal d'intel annonce un système que tu surveilles.</p></header>
+    <div id="al-out"></div>
+  </section>
+
+  <!-- DSCAN -->
+  <section id="v-dscan" class="view" hidden>
+    <header class="vhead"><h1>Analyse D-scan</h1>
+      <p>Colle le résultat de ton scanner directionnel : composition de la flotte, ce qui est sur grille, valeur estimée et alertes (bulles, cynos, capitaux, logi…).</p></header>
+    <div class="toolbar">
+      <div class="field grow"><label>Résultat du D-scan. En jeu : Alt+D, clic dans la liste, Ctrl+A puis Ctrl+C.</label>
+        <textarea id="ds-text" rows="6"></textarea></div>
+      <div class="field"><label>Sur grille si moins de (km)</label><input id="ds-grid" type="number" value="10000"></div>
+      <button class="primary" id="ds-run">Analyser</button>
+    </div>
+    <div id="ds-out"></div>
+  </section>
+
+  <!-- PRODUCTION -->
+  <section id="v-production" class="view">
+    <header class="vhead">
+      <h1>Plan de production</h1>
+      <p>Ajoute un ou plusieurs produits : l'outil déroule tout l'arbre de fabrication, choisit la meilleure structure pour chaque job et sort la liste d'achats.</p>
+    </header>
+    <div class="toolbar">
+      <div class="field grow"><label>Produit (nom français ou anglais)</label><div class="ac"><input id="p-item" placeholder="Raven, Wolf, Fusion Thruster…" autocomplete="off"><div class="ac-list" id="p-item-list"></div></div></div>
+      <div class="field"><label>Quantité</label><input id="p-qty" type="number" min="1" value="1"></div>
+      <button id="p-add" title="Ajouter ce produit à la liste pour planifier plusieurs produits ensemble">Ajouter à la liste</button>
+      <div class="field" id="p-dec-wrap" hidden><label>Décrypteur <abbr class="help" data-help="decryptor">?</abbr></label><select id="p-dec"></select></div>
+      <label class="check"><input type="checkbox" id="p-stock"> Déduire mon stock <abbr class="help" data-help="stock">?</abbr></label>
+      <div class="field"><label>Fabriquer <abbr class="help" data-help="depth">?</abbr></label><select id="p-depth"></select></div>
+      <label class="check"><input type="checkbox" id="p-opt"> Optimiser la marge <abbr class="help" data-help="optimize">?</abbr></label>
+      <button class="primary" id="p-run">Calculer le plan</button>
+      <div class="cart" id="p-cart"></div>
+    </div>
+    <div id="p-out"></div>
+  </section>
+
+  <!-- INVENTION -->
+  <section id="v-invention" class="view" hidden>
+    <header class="vhead">
+      <h1>Invention T2</h1>
+      <p>Compare tous les décrypteurs pour un produit T2 : probabilité, runs, ME/TE et profit réel par unité.</p>
+    </header>
+    <div class="toolbar">
+      <div class="field grow"><label>Produit T2</label><div class="ac"><input id="i-item" placeholder="Wolf, Hammerhead II, Damage Control II…" autocomplete="off"><div class="ac-list" id="i-item-list"></div></div></div>
+    </div>
+    <div id="i-out"></div>
+  </section>
+
+  <!-- OPPORTUNITES -->
+  <section id="v-opportunites" class="view" hidden>
+    <header class="vhead">
+      <h1>Opportunités industrielles</h1>
+      <p>Scanne tous les produits fabricables, calcule le coût optimal avec tes structures, puis classe par ISK/jour réaliste : un slot de production plafonné à 10 % du volume quotidien du marché.</p>
+    </header>
+    <div class="toolbar">
+      <div class="field"><label>Marge min. (%)</label><input id="o-margin" type="number"></div>
+      <div class="field"><label>Volume/jour min.</label><input id="o-vol" type="number"></div>
+      <div class="field"><label>Coût unitaire max (ISK, 0 = illimité)</label><input id="o-maxcost" type="number"></div>
+      <label class="check"><input type="checkbox" id="o-t2"> T2</label>
+      <label class="check"><input type="checkbox" id="o-react"> Réactions</label>
+      <label class="check"><input type="checkbox" id="o-cap"> Capitaux</label>
+      <button class="primary" id="o-run">Lancer le scan</button>
+    </div>
+    <div class="progress" id="o-prog"></div>
+    <div id="o-out"></div>
+  </section>
+
+  <!-- ARBITRAGE -->
+  <section id="v-arbitrage" class="view" hidden>
+    <header class="vhead">
+      <h1>Arbitrage entre hubs</h1>
+      <p>Acheter dans un hub, revendre dans un autre. Transport (ISK/m³ des réglages), taxes et volume réellement écoulé à destination pris en compte.</p>
+    </header>
+    <div class="toolbar">
+      <div class="field"><label>Hubs</label><div id="a-hubs" class="chips"></div></div>
+      <div class="field"><label>Profit min. (ISK)</label><input id="a-minprofit" type="number"></div>
+      <div class="field"><label>Marge min. (%)</label><input id="a-margin" type="number"></div>
+      <label class="check"><input type="checkbox" id="a-instant"> Revente immédiate (buy orders)</label>
+      <button class="primary" id="a-run">Lancer l'analyse</button>
+    </div>
+    <div class="progress" id="a-prog"></div>
+    <div id="a-out"></div>
+  </section>
+
+  <!-- JOBS EN COURS -->
+  <section id="v-jobs" class="view" hidden>
+    <header class="vhead">
+      <h1>Mes jobs en cours</h1>
+      <p>Tous les jobs industriels de tes personnages connectés, du plus proche de la fin au plus lointain.</p>
+    </header>
+    <div class="toolbar"><button class="primary" id="j-refresh">Actualiser</button><span class="muted" id="j-info"></span></div>
+    <div id="j-out"></div>
+  </section>
+
+  <!-- DEMARRAGE -->
+  <section id="v-demarrage" class="view" hidden>
+    <header class="vhead">
+      <h1>Bienvenue</h1>
+      <p>Environ cinq minutes, une seule fois. Tu pourras tout modifier plus tard dans Réglages et Structures.</p>
+    </header>
+    <div id="w-out"></div>
+  </section>
+
+  <!-- AIDE -->
+  <section id="v-aide" class="view" hidden>
+    <header class="vhead">
+      <h1>Aide & lexique</h1>
+      <p>Les termes de l'industrie EVE expliqués simplement, et les réponses aux questions courantes.</p>
+    </header>
+    <div id="h-out"></div>
+  </section>
+
+  <!-- STRUCTURES -->
+  <section id="v-structures" class="view" hidden>
+    <header class="vhead">
+      <h1>Structures de production</h1>
+      <p>Déclare les structures que tu veux utiliser. Pour chaque job, l'outil prend celle qui coûte le moins (matériaux + taxe + indice du système).</p>
+    </header>
+    <div id="s-list"></div>
+    <div class="row-actions">
+      <button id="s-add">Ajouter une structure</button>
+      <button class="primary" id="s-save">Enregistrer les structures</button>
+    </div>
+  </section>
+
+  <!-- PERSONNAGES -->
+  <section id="v-personnages" class="view" hidden>
+    <header class="vhead">
+      <h1>Personnages & stock</h1>
+      <p>Connecte tes personnages pour déduire ce que tu as déjà en hangar (perso ou corpo), récupérer tes blueprints (ME/TE réels) et tes compétences.</p>
+    </header>
+    <div id="c-out"></div>
+  </section>
+
+  <!-- REGLAGES -->
+  <section id="v-reglages" class="view" hidden>
+    <header class="vhead">
+      <h1>Réglages</h1>
+      <p>Les valeurs par défaut sont raisonnables, mais vérifie taxes et compétences contre ton jeu : elles changent directement la marge.</p>
+    </header>
+    <div id="r-out"></div>
+  </section>
+</main>
+<div id="toast"></div>
+<script src="/static/i18n-data.js"></script>
+<script src="/static/i18n.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
