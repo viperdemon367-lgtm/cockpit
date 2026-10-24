@@ -10,9 +10,10 @@ import shutil
 
 # ---------------------------------------------------------------- réglages
 DONATE_CHARACTER = "Robapin"
-DOWNLOAD_URL = "https://github.com/viperdemon367-lgtm/cockpit/releases/latest"     # page de téléchargement de l'exe
-SOURCE_URL = "https://github.com/viperdemon367-lgtm/cockpit"                        # code source
-SITE_URL = "https://cockpit-1xo.pages.dev"                           # adresse publique du site
+GITHUB_REPO = "TON-COMPTE/cockpit"          # <-- remplace par compte/dépôt GitHub exacts, rien d'autre à changer
+DOWNLOAD_URL = f"https://github.com/{GITHUB_REPO}/releases/latest/download/Cockpit.exe"  # lien direct, stable
+SOURCE_URL = f"https://github.com/{GITHUB_REPO}"
+SITE_URL = "https://cockpit.pages.dev"      # mets ton-sous-domaine.pages.dev (Cloudflare te le donne), ou ton domaine perso
 LANGS = ["en", "fr", "es", "de", "ru"]
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -22,6 +23,14 @@ for f in ("content_en_fr.py", "content_es.py", "content_de.py", "content_ru.py")
     exec(open(os.path.join(HERE, f), encoding="utf-8").read())
 ICONS = {"doctrines": "⚔", "map": "✦", "alarm": "◉", "planetary": "◐", "production": "⚙", "dscan": "◎", "invention": "⚗",
          "opportunities": "▲", "arbitrage": "⇄", "characters": "☰", "jobs": "⏱"}
+
+
+def shot_path(lang, name):
+    """Capture dans la langue demandée si elle existe (site/assets/<lang>/<name>), sinon la version par défaut.
+    Pour fournir une capture dans une langue : dépose le fichier dans site/assets/<lang>/ avec le même nom."""
+    if name and os.path.exists(os.path.join(HERE, "assets", lang, name)):
+        return f"{lang}/{name}"
+    return name
 e = html.escape
 
 
@@ -69,7 +78,7 @@ def index(lang):
     cards = ""
     for fid in FEATURES_ORDER:
         F = T["F"][fid]
-        shot = SHOTS.get(fid)
+        shot = shot_path(lang, SHOTS.get(fid))
         media = f'<img src="{root}assets/{shot}" alt="" loading="lazy">' if shot else f'<div class="glyph">{ICONS[fid]}</div>'
         cards += f"""<a class="fcard {CAT[fid]}" href="features/{fid}.html">{media}<div class="fbody"><h3>{e(F['t'])}</h3><p>{e(F['s'])}</p><span class="more">{e(T['learn_more'])} →</span></div></a>"""
     how = "".join(f'<div class="how"><span class="n">{i + 1}</span><h3>{e(a)}</h3><p>{e(b)}</p></div>' for i, (a, b) in enumerate(T["how_steps"]))
@@ -78,7 +87,7 @@ def index(lang):
 <p class="kicker">{e(T['hero_kicker'])}</p><h1>{T['hero_title']}</h1><p class="lead">{e(T['hero_sub'])}</p>
 <div class="ctas"><a class="btn big" href="download.html">{e(T['cta_download'])}</a><a class="btn ghost big" href="#features">{e(T['cta_features'])}</a></div>
 <ul class="trust">{trust}</ul></div>
-<div class="hero-shot"><img src="{root}assets/map-sov.png" alt=""><img class="float" src="{root}assets/fit.png" alt=""></div></div></section>
+<div class="hero-shot"><img src="{root}assets/{shot_path(lang, "map-sov.png")}" alt=""><img class="float" src="{root}assets/{shot_path(lang, "fit.png")}" alt=""></div></div></section>
 <section class="pillars"><div class="wrap"><h2>{e(T['pillars_title'])}</h2><div class="pillar-grid">{pillars}</div></div></section>
 <section id="features"><div class="wrap"><h2>{e(T['features_title'])}</h2><p class="muted center">{e(T['features_sub'])}</p><div class="fgrid">{cards}</div></div></section>
 <section class="howto"><div class="wrap"><h2>{e(T['how_title'])}</h2><div class="how-grid">{how}</div>
@@ -91,8 +100,9 @@ def index(lang):
 def feature(lang, fid):
     T, root = C[lang], "../../"
     F = T["F"][fid]
-    shot = SHOTS.get(fid)
-    extra = SHOTS.get("hunt") if fid == "map" else (SHOTS.get("doctrines") and "doctrines.png" if fid == "doctrines" else None)
+    shot = shot_path(lang, SHOTS.get(fid))
+    extra_name = SHOTS.get("hunt") if fid == "map" else None
+    extra = shot_path(lang, extra_name) if extra_name else None
     media = f'<div class="shot"><img src="{root}assets/{shot}" alt=""></div>' if shot else f'<div class="glyph big">{ICONS[fid]}</div>'
     if extra:
         media += f'<div class="shot"><img src="{root}assets/{extra}" alt="" loading="lazy"></div>'
