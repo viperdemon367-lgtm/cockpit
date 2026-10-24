@@ -3,9 +3,41 @@
 RÈGLE : chaque évolution livrée incrémente VERSION et ajoute une entrée EN TÊTE de CHANGELOG
 (numéro, date, résumé, liste des ajouts/corrections en langage simple pour les joueurs).
 """
-VERSION = "1.6.0"
+VERSION = "1.6.2"
 
 CHANGELOG = [
+    {
+        "version": "1.6.2", "date": "2026-10-24", "title": "Site correctement traduit et publication automatique",
+        "highlights": "Les captures du site s'affichent maintenant dans la langue de la page ; publication "
+                      "automatique de l'exe à chaque modification du programme.",
+        "added": [
+            "Site : système de captures d'écran par langue (site/assets/<langue>/), avec repli sur l'anglais "
+            "quand une capture n'existe pas encore dans une langue donnée.",
+            "Captures en français ajoutées pour toutes les pages de fonctions.",
+            "Publication de l'exe automatique : le workflow se relance tout seul à chaque modification de app/, "
+            "static/, tests/, run.py ou requirements.txt sur la branche main. Plus besoin de cliquer "
+            "« Run workflow » à chaque mise à jour.",
+        ],
+        "changed": [
+            "README : marche à suivre pour les mises à jour (sans manipulation GitHub/Cloudflare une fois "
+            "configuré) et pour brancher un nom de domaine personnalisé, acheté chez Cloudflare ou ailleurs.",
+        ],
+    },
+    {
+        "version": "1.6.1", "date": "2026-10-24", "title": "Mise en ligne simplifiée",
+        "highlights": "Publication automatique de Cockpit.exe sur GitHub, et guide pas à pas pour mettre le site en "
+                      "ligne gratuitement sur Cloudflare Pages avec ton propre nom de domaine.",
+        "added": [
+            "Nouveau workflow « Publier une version » : construit Cockpit.exe sous Windows et le publie en Release "
+            "GitHub, à une adresse de téléchargement stable qui ne change jamais entre deux versions.",
+            "README : guide complet pour mettre le projet sur GitHub, publier l'exe automatiquement, héberger le site "
+            "gratuitement sur Cloudflare Pages, et brancher un nom de domaine personnalisé.",
+        ],
+        "changed": [
+            "site/build.py : les adresses de téléchargement et du dépôt se déduisent maintenant d'un seul réglage "
+            "(GITHUB_REPO) à renseigner.",
+        ],
+    },
     {
         "version": "1.6.0", "date": "2026-10-23", "title": "Planétaire, multilingue et dons",
         "highlights": "Nouvelle section Planétaire (P0 → P4), interface en anglais par défaut avec 5 langues, page de dons "
