@@ -268,7 +268,7 @@ def test_alarm_api(client):
     assert client.get("/api/alarm/sound?name=sonar&volume=40").content[:4] == b"RIFF"
     assert "sirene" in client.get("/api/alarm/sounds").json()
     w = client.get("/api/alarm/windows").json()
-        assert isinstance(w["supported"], bool) and w["windows"] == []
+    assert isinstance(w["supported"], bool) and w["windows"] == []
     assert client.post("/api/alarm/test", json={"level": "intel"}).json()["ok"]
     ev = client.get("/api/alarm/status").json()["events"][0]
     assert ev["sound"] == "cloche"
