@@ -10,9 +10,9 @@ import shutil
 
 # ---------------------------------------------------------------- réglages
 DONATE_CHARACTER = "Robapin"
-DOWNLOAD_URL = "https://github.com/TON-COMPTE/cockpit/releases/latest"     # page de téléchargement de l'exe
-SOURCE_URL = "https://github.com/TON-COMPTE/cockpit"                        # code source
-SITE_URL = "https://TON-COMPTE.github.io/cockpit"                           # adresse publique du site
+DOWNLOAD_URL = "https://github.com/viperdemon367-lgtm/cockpit/releases/latest"     # page de téléchargement de l'exe
+SOURCE_URL = "https://github.com/viperdemon367-lgtm/cockpit"                        # code source
+SITE_URL = "https://cockpit-1xo.pages.dev"                           # adresse publique du site
 LANGS = ["en", "fr", "es", "de", "ru"]
 
 HERE = os.path.dirname(os.path.abspath(__file__))
